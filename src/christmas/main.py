@@ -1,3 +1,5 @@
+from input_view import InputView
+
 def main():
     # TODO: 프로그램 구현
     pass
