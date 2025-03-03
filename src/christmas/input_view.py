@@ -34,3 +34,38 @@ class InputView:
 
             except ValueError:
                 print("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.")
+
+
+    def _parse_order(self, order):
+        orders = order.split(",")
+        order_list = {}
+        total_count = 0
+
+        for order in orders:
+            menu = order.split("-")
+
+            if len(menu) != 2:
+                raise ValueError
+
+            menu_name, count = menu[0], menu[1]
+
+            if menu_name not in self.total_menu:
+                raise ValueError
+
+            if not count.isdigit() or int(count) < 1:
+                raise ValueError
+
+            if menu_name in order_list:
+                raise ValueError
+
+            order_list[menu_name] = int(count)
+            total_count = total_count + int(count)
+
+        if total_count > 20:
+            raise ValueError
+
+        return order_list
+
+
+    def _order_beverage_only(self, orders):
+        return all(menu in self.beverage for menu in orders)
