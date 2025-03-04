@@ -16,14 +16,22 @@ jobs:
 
       - name: Ensure no external libraries are imported
         run: |
-          python -c "
+          # Here-doc 방식을 사용해서 여러 줄짜리 파이썬 코드를 안전하게 실행
+          python <<EOF
           import os
           import ast
 
-          allowed_modules = {'sys', 'os', 'math', 'random', 'datetime', 're', 'enum'}
+          # 프로젝트에서 허용할 표준 라이브러리 목록
+          allowed_modules = {
+              'sys', 'os', 'math', 'random', 'datetime',
+              're', 'enum'
+          }
 
           def is_internal_module(module_name):
-              \"\"\" 내부 모듈(`src/` 폴더 내 Python 파일)인지 확인 \"\"\"
+              """
+              예: 'christmas.input_view' → 'src/christmas/input_view.py'가 존재하면 내부 모듈
+                  'input_view' → 'src/input_view.py'가 존재하면 내부 모듈
+              """
               module_path = os.path.join('src', module_name.replace('.', '/') + '.py')
               module_dir = os.path.join('src', module_name.replace('.', '/'))
               return os.path.exists(module_path) or os.path.isdir(module_dir)
@@ -32,10 +40,12 @@ jobs:
               with open(file_path, 'r', encoding='utf-8') as f:
                   tree = ast.parse(f.read(), filename=file_path)
                   for node in ast.walk(tree):
+                      # import x
                       if isinstance(node, ast.Import):
                           for alias in node.names:
                               if alias.name not in allowed_modules and not is_internal_module(alias.name):
                                   raise SystemExit(f'❌ External library detected: {alias.name} in {file_path}')
+                      # from x import y
                       elif isinstance(node, ast.ImportFrom):
                           if node.module and node.module not in allowed_modules and not is_internal_module(node.module):
                               raise SystemExit(f'❌ External library detected: {node.module} in {file_path}')
@@ -43,4 +53,5 @@ jobs:
           for root, _, files in os.walk('src'):
               for file in files:
                   if file.endswith('.py'):
-                      check_imports(os.path.join(root, file))"
+                      check_imports(os.path.join(root, file))
+          EOF
