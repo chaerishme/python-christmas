@@ -16,28 +16,33 @@ class Calculate:
         self.dessert = {"초코케이크", "아이스크림"}
 
     def calc_prev_price(self, orders):
+        """할인 전 금액 계산"""
         prev_price = sum(
             self.total_menu[menu] * count for menu, count in orders.items()
         )
         return prev_price
 
     def give_giveaway(self, prev_price):
+        """증정 여부 계산"""
         if prev_price >= 120000:
             return True
 
         return False
 
     def calc_date_dc(self, date):
+        """크리스마스 디데이 할인 금액 계산"""
         if date > 25:
             return 0
         return (date - 1) * 100 + 1000
 
     def calc_day(self, date):
+        """주말인지 평일인지 계산"""
         if date % 7 == 1 or date % 7 == 2:
             return True  # 주말
         return False  # 평일
 
     def calc_day_dc(self, day, orders):
+        """요일에 따른 할인 금액 계산"""
         if day:
             main_count = sum(
                 count for menu, count in orders.items() if menu in self.main
@@ -50,6 +55,7 @@ class Calculate:
         return dessert_count * 2023
 
     def calc_star_dc(self, date):
+        """별이 있는 날짜에 대한 할인 금액 계산"""
         if date % 7 == 3 or date == 25:
             return 1000
         return 0

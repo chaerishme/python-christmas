@@ -22,7 +22,7 @@ jobs:
 
       - name: Ensure error messages contain '[ERROR]'
         run: |
-          if ! grep -r '\[ERROR\' src/; then
+          if ! grep -r '\[ERROR\]' src/; then
             echo "❌ Error messages must contain '[ERROR]'!"
             exit 1
           fi
