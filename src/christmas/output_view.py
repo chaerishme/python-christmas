@@ -31,8 +31,7 @@ class OutputView:
         calculator = Calculate()
         prev_price = calculator.calc_prev_price(orders)
         print("<할인 전 총주문 금액>")
-        print(f"{prev_price:,}원")
-        print()
+        print(f"{prev_price:,}원\n")
 
         return prev_price
 
@@ -46,6 +45,7 @@ class OutputView:
             return None
 
         print("없음\n")
+        return None
 
     def print_benefit(self, date, orders, prev_price):
         """손님이 받은 혜택 내역을 출력하는 함수"""
@@ -83,7 +83,7 @@ class OutputView:
         day_dc = calculator.calc_day_dc(day, orders)
 
         if day_dc <= 0:
-            return 0
+            return None
 
         if day and day_dc > 0:
             print(f"주말 할인: -{day_dc:,}원")
