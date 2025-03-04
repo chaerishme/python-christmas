@@ -1,8 +1,9 @@
-from calculate import Calculate
 from enum import Enum
+from calculate import Calculate
 
 
 class Badge(Enum):
+    """12월 이벤트 배지 정보를 저장하는 클래스"""
     SANTA = ("산타", 20000)
     TREE = ("트리", 10000)
     STAR = ("별", 5000)
@@ -13,6 +14,7 @@ class Badge(Enum):
 
 
 class OutputView:
+    """출력을 담당하는 클래스"""
     def print_menu(self, orders):
         print()
         print("<주문 메뉴>")
@@ -110,6 +112,8 @@ class OutputView:
             if total_dc >= badge.threshold:
                 print(badge.label)
                 return
+        
+        return
 
     def print_no_dc(self, prev_price):
         print("<증정 메뉴>\n없음\n")
