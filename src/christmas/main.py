@@ -14,7 +14,7 @@ def main():
 
     output_view.print_menu(orders)
     prev_price = output_view.print_price(orders)
-    
+
     if prev_price < 10000:
         output_view.print_no_dc(prev_price)
         return
@@ -26,4 +26,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
