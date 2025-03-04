@@ -12,6 +12,7 @@ class Badge(Enum):
     STAR = ("별", 5000)
 
     def __init__(self, label, threshold):
+        """Badege 인스턴스 초기화"""
         self.label = label
         self.threshold = threshold
 
@@ -92,6 +93,7 @@ class OutputView:
         if not day and day_dc > 0:
             print(f"평일 할인: -{day_dc:,}원")
             return day_dc
+        return None
 
     def print_special_dc(self, date):
         """특별 할인 금액을 출력하는 함수"""
