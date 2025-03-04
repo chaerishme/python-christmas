@@ -10,6 +10,7 @@ class Calculate:
     조건에 맞춰 혜택을 계산
     """
     def __init__(self):
+        """calculate 인스턴스 초기화"""
         self.total_menu = TOTAL_MENU
         self.main = {"티본스테이크", "바비큐립", "해산물파스타", "크리스마스파스타"}
         self.dessert = {"초코케이크", "아이스크림"}
