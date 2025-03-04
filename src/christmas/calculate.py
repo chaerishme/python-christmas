@@ -1,3 +1,6 @@
+"""
+혜택 계산을 담당하는 모듈
+"""
 from menu import TOTAL_MENU
 
 

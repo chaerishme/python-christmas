@@ -1,3 +1,6 @@
+"""
+입력을 관리하고 예외처리를 하는 모듈
+"""
 from menu import TOTAL_MENU
 
 
@@ -44,8 +47,8 @@ class InputView:
         order_list = {}
         total_count = 0
 
-        for order in orders:
-            menu = order.split("-")
+        for item in orders:
+            menu = item.split("-")
 
             if len(menu) != 2:
                 raise ValueError

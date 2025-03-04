@@ -1,3 +1,6 @@
+""""
+결과 출력을 담당하는 모듈
+"""
 from enum import Enum
 from calculate import Calculate
 
@@ -36,12 +39,10 @@ class OutputView:
         print("<증정 메뉴>")
 
         if calculator.give_giveaway(prev_price):
-            print("샴페인 1개")
-            print()
-            return
+            print("샴페인 1개\n")
+            return None
 
-        print("없음")
-        print()
+        print("없음\n")
 
     def print_benefit(self, date, orders, prev_price):
         print("<혜택 내역>")
@@ -111,9 +112,8 @@ class OutputView:
         for badge in Badge:
             if total_dc >= badge.threshold:
                 print(badge.label)
-                return
-        
-        return
+                return None
+        return None
 
     def print_no_dc(self, prev_price):
         print("<증정 메뉴>\n없음\n")
