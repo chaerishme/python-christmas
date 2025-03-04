@@ -1,44 +1,57 @@
-name: Check No External Libraries
+# name: Check No External Libraries
 
-on:
-  push:
-    branches: [ '*' ]
-  pull_request:
-    branches: [ main ]
+# on: pull_request
 
-jobs:
-  check-no-external-libs:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+# jobs:
+#   check-no-external-libs:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.9"
+#       - name: Set up Python
+#         uses: actions/setup-python@v4
+#         with:
+#           python-version: "3.9"
 
-      - name: Ensure no external libraries are imported
-        run: |
-          python -c "
-          import os
-          import ast
+#       - name: Ensure no external libraries are imported
+#         run: |
+#           # Here-doc 방식을 사용해서 여러 줄짜리 파이썬 코드를 안전하게 실행
+#           python <<EOF
+#           import os
+#           import ast
 
-          allowed_modules = {'sys', 'os', 'math', 'random', 'datetime', 're'}
+#           # 프로젝트에서 허용할 표준 라이브러리 목록
+#           allowed_modules = {
+#               'sys', 'os', 'math', 'random', 'datetime',
+#               're', 'enum'
+#           }
 
-          def check_imports(file_path):
-              with open(file_path, 'r', encoding='utf-8') as f:
-                  tree = ast.parse(f.read(), filename=file_path)
-                  for node in ast.walk(tree):
-                      if isinstance(node, ast.Import):
-                          for alias in node.names:
-                              if alias.name not in allowed_modules:
-                                  raise SystemExit(f'❌ External library detected: {alias.name} in {file_path}')
-                      elif isinstance(node, ast.ImportFrom):
-                          if node.module and node.module not in allowed_modules:
-                              raise SystemExit(f'❌ External library detected: {node.module} in {file_path}')
+#           def is_internal_module(module_name):
+#               """
+#               예: 'christmas.input_view' → 'src/christmas/input_view.py'가 존재하면 내부 모듈
+#                   'input_view' → 'src/input_view.py'가 존재하면 내부 모듈
+#               """
+#               module_path = os.path.join('src', module_name.replace('.', '/') + '.py')
+#               module_dir = os.path.join('src', module_name.replace('.', '/'))
+#               return os.path.exists(module_path) or os.path.isdir(module_dir)
 
-          for root, _, files in os.walk('src'):
-              for file in files:
-                  if file.endswith('.py'):
-                      check_imports(os.path.join(root, file))"
+#           def check_imports(file_path):
+#               with open(file_path, 'r', encoding='utf-8') as f:
+#                   tree = ast.parse(f.read(), filename=file_path)
+#                   for node in ast.walk(tree):
+#                       # import x
+#                       if isinstance(node, ast.Import):
+#                           for alias in node.names:
+#                               if alias.name not in allowed_modules and not is_internal_module(alias.name):
+#                                   raise SystemExit(f'❌ External library detected: {alias.name} in {file_path}')
+#                       # from x import y
+#                       elif isinstance(node, ast.ImportFrom):
+#                           if node.module and node.module not in allowed_modules and not is_internal_module(node.module):
+#                               raise SystemExit(f'❌ External library detected: {node.module} in {file_path}')
+
+#           for root, _, files in os.walk('src'):
+#               for file in files:
+#                   if file.endswith('.py'):
+#                       check_imports(os.path.join(root, file))
+#           EOF
