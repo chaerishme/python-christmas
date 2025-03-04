@@ -1,8 +1,12 @@
+"""
+전체 흐름을 관리하는 메인 함수.
+"""
 from input_view import InputView
 from output_view import OutputView
 
 
 def main():
+    """전체적인 실행을 관리하고 적절한 함수를 호출하는 함수"""
     input_view = InputView()
     output_view = OutputView()
 
